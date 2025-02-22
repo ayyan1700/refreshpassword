@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+
+ .container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+ .main{
+ text-align: center;
+ width: 690px;
+ margin-top: 200px;
+ padding: 30px;
+ border-radius: 30px;
+ box-shadow: 0px 1px 10px red;
+ }
+ .btn{  
+    text-align: start;
+    width: 650px;
+    margin: 0px  auto 20px auto ;
+    box-shadow: 0px 1px 10px red;
+    border-radius: 10px;
+    padding: 10px;
+ }
+.size{
+  font-size: 20px;
+  margin-top: -10px;
+}
+.fa-solid {
+    float:right;
+    margin-right: 8px;
+    color: rgba(165, 42, 42, 0.781);
+}
+.fa-solid:hover{
+    color: rgba(255, 0, 0, 0.322);
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 200px;
+  height: 15px;
+  border-radius: 5px;  
+  background: #b97a7aa9;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background:red;
+  cursor: pointer;
+}
+.size{
+    color: red;
+}
+
+.sizes{
+    border-radius: 10px;
+    padding: 5px;
+    color: red;
+    border: 1px solid red;
+}
+.text{
+    color: red;
+}
+.red{
+    color: red;
+}
+.butn{
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 7px;
+    margin-top: 10px;
+}
+</style>
+
+<body>
+    <div class="container">
+        <div class="main">
+            <p class="btn">Password : <span id="show"></span>  
+                <i class="fa-solid fa-copy" id="copied" title="Copy to Clipboard"></i>
+                <i class="fa-solid fa-arrows-rotate" id="refresh" title="Regenerate Password"></i></p>
+        <label class="size" for="size">Select the size : </label>
+        <input class="sizes" type="number" id="size" value="" min="1" max="50" placeholder="Select">
+        <input type="range" class="slider" min="1" max="50" id="slider">
+        <p class="text">Value: <span id="demo"></span></p> 
+        <label class="red" for="upper">Uppercase</label>
+        <input class="red" type="checkbox" id="upper"><br>
+        <label class="red"for="lower">Lowercase</label>
+        <input class="red"type="checkbox" id="lower"><br>
+       
+        <button class="butn"  onclick="generatepassword()">Generate Password</button>
+    </div>
+    </div>
+    
+    <script>
+
+        var sizing = document.getElementById('size');
+        var slider = document.getElementById('slider');
+        var output = document.getElementById('demo');
+        var show = document.getElementById('show');
+        var up = document.getElementById('upper');
+        var low = document.getElementById('lower');
+        var coping = document.getElementById('copied');
+        var retry = document.getElementById('refresh');
+
+        sizing.addEventListener('input', function() {
+            slider.value = sizing.value;
+            output.innerHTML = sizing.value;
+        });
+        slider.addEventListener('input', function() {
+            sizing.value = slider.value;
+            output.innerHTML = slider.value;
+        });
+        output.innerHTML = sizing.value || slider.value;
+
+
+        var characters = 'abcdefghklmnoprstvwsxyz1234567890!@#$%^&*()'; 
+
+        up.addEventListener('change', function() {
+            if (up.checked) {
+                low.checked = false; 
+            }
+        });
+        low.addEventListener('change', function() {
+            if (low.checked) {
+                up.checked = false; 
+            }
+        });
+        
+        function generatepassword() {
+            var passwordLength = parseInt(sizing.value); 
+            var password = '';
+
+            for (var i = 0; i < passwordLength; i++) {
+                var randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters[randomIndex];
+            }
+            if (up.checked) {
+                password = password.toUpperCase(); 
+            } else if (low.checked) {
+                password = password.toLowerCase(); 
+            }
+            show.innerHTML = password;
+        }
+    
+
+        coping.addEventListener('click', function() {
+            var passwordText = show.innerHTML; 
+            if (passwordText) {
+                navigator.clipboard.writeText(passwordText)
+                    .then(() => {
+                        alert("Password copied to clipboard!");
+                    })
+                    .catch(err => {
+                        alert("Failed to copy password: " + err);
+                    });
+            } else {
+                alert("No password generated to copy.");
+            }
+        }); 
+
+        retry.addEventListener('click', function() {   
+            show.innerHTML = ''; 
+            generatepassword(); 
+        });
+
+
+    </script>
+</body>
+</html>
+
+
